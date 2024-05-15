@@ -5,7 +5,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import com.github.grhscompsci2.java2DGame.actors.Actor;
-import com.github.grhscompsci2.java2DGame.actors.Astronaut;
+import com.github.grhscompsci2.java2DGame.actors.Brick;
+import com.github.grhscompsci2.java2DGame.actors.Paddle;
+import com.github.grhscompsci2.java2DGame.actors.Actor.Type;
 
 import java.awt.image.*;
 import java.io.IOException;
@@ -18,7 +20,7 @@ import java.awt.*;
  * they can draw and act here.
  */
 public class Board extends JPanel {
-  private final String BACKGROUND_FILE_NAME = "background.png";
+  private final String BACKGROUND_FILE_NAME = "background.jpg";
   /**
    * The frequency of the game updates
    */
@@ -93,7 +95,13 @@ public class Board extends JPanel {
    */
   private void initBoard() {
     // Initialize all of your actors here: players, enemies, obstacles, etc.
-    Utility.castAndCrew.add(new Astronaut());
+    Utility.castAndCrew.add(new Paddle());
+    for(int i=0;i<10;i++){
+      for(int j=0;j<10;j++){
+      Brick b=new Brick(100+i*27,50+j*15);
+      Utility.castAndCrew.add(b);
+      }
+    }
   }
   
   /**
@@ -282,7 +290,9 @@ public class Board extends JPanel {
         for (Actor other : Utility.castAndCrew) {
           // if the other actor is not dead, and we are not checking against ourself
           if (!other.isDead() && actor != other) {
-            actor.hitActor(other);
+            if(actor.getBounds().intersects(other.getBounds())){
+              actor.hitActor(other);
+            }
           }
         }
       }

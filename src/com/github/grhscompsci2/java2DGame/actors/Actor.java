@@ -3,6 +3,7 @@ package com.github.grhscompsci2.java2DGame.actors;
 import java.awt.Graphics2D;
 import java.awt.image.*;
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -27,6 +28,7 @@ public abstract class Actor {
   private double speed;
 
   private boolean isDead;
+  private Rectangle bounds;
 
   // Store what type of actor this is
   public static enum Type {
@@ -55,6 +57,8 @@ public abstract class Actor {
     this.dy = 0;
     this.isDead = false;
     loadImage();
+    bounds = new Rectangle((int) (x - sprite.getWidth() / 2), (int) (y - sprite.getWidth() / 2), (int)(sprite.getWidth()*.9),
+        (int)(sprite.getHeight()*.9));
   }
 
   /**
@@ -77,8 +81,11 @@ public abstract class Actor {
   public void act(double deltaTime) {
     x += dx * deltaTime;
     y += dy * deltaTime;
+    double offsetX = x - bounds.getWidth() / 2;
+    double offsetY = y - bounds.getHeight() / 2;
+    bounds.setLocation(Utility.scale(offsetX),Utility.scale(offsetY));
   }
-  
+
   /**
    * Draws the sprite centered at the x, y location. Adapts to scale of the
    * JFrame.
@@ -90,15 +97,13 @@ public abstract class Actor {
     double offsetX = x - sprite.getWidth() / 2;
     double offsetY = y - sprite.getHeight() / 2;
     g.drawImage(sprite, Utility.scale(offsetX), Utility.scale(offsetY), Utility.scale(sprite.getWidth()),
-    Utility.scale(sprite.getHeight()), imageObserver);
+        Utility.scale(sprite.getHeight()), imageObserver);
   }
-  
+
   public void drawDebug(Graphics2D g2d) {
-    double offsetX = x - sprite.getWidth() / 2;
-    double offsetY = y - sprite.getHeight() / 2;
-    g2d.drawRect(Utility.scale(offsetX), Utility.scale(offsetY), Utility.scale(sprite.getWidth()),
-    Utility.scale(sprite.getHeight()));
+    g2d.drawRect(bounds.x,bounds.y,bounds.width,bounds.height);
   }
+
   /**
    * Returns the x attribute
    * 
@@ -223,8 +228,7 @@ public abstract class Actor {
    * @return a rectangle in the position and size of the sprite
    */
   public Rectangle getBounds() {
-    return new Rectangle((int) (x - sprite.getWidth() / 2), (int) (y - sprite.getWidth() / 2), sprite.getWidth(),
-        sprite.getHeight());
+    return bounds;
   }
 
   /**

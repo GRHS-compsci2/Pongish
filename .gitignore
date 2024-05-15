@@ -21,3 +21,6 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+src/com/github/grhscompsci2/java2DGame/images/ball.psd
+src/com/github/grhscompsci2/java2DGame/images/blueBrick.psd
+src/com/github/grhscompsci2/java2DGame/images/paddle.psd
